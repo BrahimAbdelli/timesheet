@@ -19,6 +19,8 @@ import tn.esprit.spring.repository.DepartementRepository;
 import tn.esprit.spring.repository.EmployeRepository;
 import tn.esprit.spring.repository.TimesheetRepository;
 
+import org.apache.log4j.Logger;
+
 @Service
 public class EmployeServiceImpl implements IEmployeService {
 
@@ -31,13 +33,33 @@ public class EmployeServiceImpl implements IEmployeService {
 	@Autowired
 	TimesheetRepository timesheetRepository;
 
+	private static final Logger l = Logger.getLogger(EmployeServiceImpl.class);
+	
 	@Override
 	public Employe authenticate(String login, String password) {
+		try {
+			
+		
+		l.info("hani jit");
+		
+		l.debug("bech nebda fel méthode");
+		
+		l.debug("Je viens de lancer la divsion. " + employeRepository.getEmployeByEmailAndPassword(login, password));
 		return employeRepository.getEmployeByEmailAndPassword(login, password);
-	}
+		}
+		catch (Exception e) { l.error("Erreur dans authenticate : " + e); 
+		return null ;
+		}
+
+		}
 
 	@Override
 	public int addOrUpdateEmploye(Employe employe) {
+		l.info("hani jit");
+		
+		l.debug("bech nebda fel méthode");
+		
+		l.debug("Je viens de lancer la divsion. " + employe);
 		employeRepository.save(employe);
 		return employe.getId();
 	}
