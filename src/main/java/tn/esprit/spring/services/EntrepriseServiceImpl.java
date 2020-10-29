@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import tn.esprit.spring.entities.Departement;
 import tn.esprit.spring.entities.Entreprise;
 import tn.esprit.spring.repository.DepartementRepository;
@@ -20,13 +21,25 @@ public class EntrepriseServiceImpl implements IEntrepriseService {
 	@Autowired
 	DepartementRepository deptRepoistory;
 	
+private static final Logger l = LogManager.getLogger(EntrepriseServiceImpl.class);
+	 
+	
 	public int ajouterEntreprise(Entreprise entreprise) {
+		l.info("In  ajouterEntreprise : " + entreprise); 
 		entrepriseRepoistory.save(entreprise);
+		l.info(" Out ajouterEntreprise. ");
 		return entreprise.getId();
 	}
 
+	@Override 
+	public Entreprise updateEntreprise(Entreprise e) {
+		l.info("In  updateEntreprise : " + e); 
+		return entrepriseRepoistory.save(e);		
+	}
 	public int ajouterDepartement(Departement dep) {
+		l.info("In  ajouterDepartement: " + dep); 
 		deptRepoistory.save(dep);
+		l.info("Out  ajouterDepartement: " + dep); 
 		return dep.getId();
 	}
 	
@@ -45,17 +58,20 @@ public class EntrepriseServiceImpl implements IEntrepriseService {
 	}
 	
 	public List<String> getAllDepartementsNamesByEntreprise(int entrepriseId) {
+		l.info("in  getAllDepartementsNamesByEntreprise = " + entrepriseId);
 		Entreprise entrepriseManagedEntity = entrepriseRepoistory.findById(entrepriseId).get();
 		List<String> depNames = new ArrayList<>();
 		for(Departement dep : entrepriseManagedEntity.getDepartements()){
 			depNames.add(dep.getName());
 		}
+		l.info("depNames returned : " + depNames);
 		
 		return depNames;
 	}
 
 	@Transactional
 	public void deleteEntrepriseById(int entrepriseId) {
+		l.info("In  deleteEntreprise : " + entrepriseId); 
 		entrepriseRepoistory.delete(entrepriseRepoistory.findById(entrepriseId).get());	
 	}
 
@@ -66,8 +82,26 @@ public class EntrepriseServiceImpl implements IEntrepriseService {
 
 
 	public Entreprise getEntrepriseById(int entrepriseId) {
-		return entrepriseRepoistory.findById(entrepriseId).get();	
+		l.info("in  retrieveEntreprise id = " + entrepriseId);
+			if( entrepriseRepoistory.existsById(entrepriseId)==false)
+			{
+				return null;
+			}
+			l.info("entreprise returned : " + entrepriseRepoistory.findById(entrepriseId).get());
+			return entrepriseRepoistory.findById(entrepriseId).get();
 	}
+	
+	@Override
+	public List<Entreprise> getAllEntreprises() {
+		l.info("In  retrieveAllEntreprises : "); 
+		List<Entreprise> Entreprises = (List<Entreprise>) entrepriseRepoistory.findAll();  
+		for (Entreprise e : Entreprises) {
+			l.debug("entreprise +++ : " + e);
+		}
+		l.info("Out of retrieveAllEntreprises."); 
+		return Entreprises;
+	}
+
 	///hello test 
 
 }

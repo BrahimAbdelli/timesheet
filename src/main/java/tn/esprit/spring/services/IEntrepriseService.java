@@ -14,4 +14,6 @@ public interface IEntrepriseService {
 	public void deleteEntrepriseById(int entrepriseId);
 	public void deleteDepartementById(int depId);
 	public Entreprise getEntrepriseById(int entrepriseId);
+	Entreprise updateEntreprise(Entreprise e);
+	List<Entreprise> getAllEntreprises();
 }
