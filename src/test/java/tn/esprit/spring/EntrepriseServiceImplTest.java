@@ -57,11 +57,6 @@ public class EntrepriseServiceImplTest {
 	}
 	
 	
-	/*@Test
-	public void testGetEntrepriseById() {
-		Entreprise entrepriseRetrieved = us.getEntrepriseById(25); 
-		assertEquals(25, entrepriseRetrieved.getId());
-	}*/
 	
 
 }
