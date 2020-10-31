@@ -49,14 +49,19 @@ public class EntrepriseServiceImplTest {
 		assertEquals(e.getName(), entrepriseAdded.getName());
 	}
 	
-	@Test
+	/*@Test
 	public void testGetAllEntreprise() {
 		
 		List<Entreprise> Entreprises = us.getAllEntreprises(); 
 		assertEquals(25, Entreprises.size());
+	}*/
+	
+	
+	@Test
+	public void testGetEntrepriseById() {
+		Entreprise entrepriseRetrieved = us.getEntrepriseById(25); 
+		assertEquals(25, entrepriseRetrieved.getId());
 	}
-	
-	
 	
 
 }
