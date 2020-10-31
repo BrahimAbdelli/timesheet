@@ -1,3 +1,4 @@
+
 package tn.esprit.spring;
 
 import org.junit.Test;
@@ -55,13 +56,13 @@ public class EntrepriseServiceImplTest {
 		List<Entreprise> Entreprises = us.getAllEntreprises(); 
 		assertEquals(25, Entreprises.size());
 	}*/
-	 //test
 	
-	@Test
+	
+	/*@Test
 	public void testGetEntrepriseById() {
 		Entreprise entrepriseRetrieved = us.getEntrepriseById(25); 
 		assertEquals(25, entrepriseRetrieved.getId());
-	}
-//tests
+	}*/
+	
 
 }
