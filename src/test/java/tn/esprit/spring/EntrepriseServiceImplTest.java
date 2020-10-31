@@ -55,7 +55,7 @@ public class EntrepriseServiceImplTest {
 		List<Entreprise> Entreprises = us.getAllEntreprises(); 
 		assertEquals(25, Entreprises.size());
 	}*/
-	
+	 //test
 	
 	@Test
 	public void testGetEntrepriseById() {
