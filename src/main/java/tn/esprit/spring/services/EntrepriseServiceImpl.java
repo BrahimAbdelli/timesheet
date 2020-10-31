@@ -69,11 +69,6 @@ private static final Logger l = LogManager.getLogger(EntrepriseServiceImpl.class
 		return depNames;
 	}
 
-	@Transactional
-	public void deleteEntrepriseById(int entrepriseId) {
-		l.info("In  deleteEntreprise : " + entrepriseId); 
-		entrepriseRepoistory.delete(entrepriseRepoistory.findById(entrepriseId).get());	
-	}
 
 	@Transactional
 	public void deleteDepartementById(int depId) {
@@ -81,14 +76,18 @@ private static final Logger l = LogManager.getLogger(EntrepriseServiceImpl.class
 	}
 
 
-	public Entreprise getEntrepriseById(int entrepriseId) {
-		l.info("in  retrieveEntreprise id = " + entrepriseId);
-			if( entrepriseRepoistory.existsById(entrepriseId)==false)
-			{
-				return null;
-			}
-			l.info("entreprise returned : " + entrepriseRepoistory.findById(entrepriseId).get());
-			return entrepriseRepoistory.findById(entrepriseId).get();
+	@Transactional
+	public void deleteEntrepriseById(int entrepriseId) {
+		try {
+			l.info(" search for entreprise");
+			Entreprise e = entrepriseRepoistory.findById(entrepriseId).get();
+			l.info(" found entreprise");
+			l.info(" deleting  entreprise");
+		entrepriseRepoistory.delete(e);
+		l.info(" operation finish  entreprise");
+		} catch (Exception ex) {
+			l.error("entreprise could not be found !!!!");	
+		}
 	}
 	
 	@Override
@@ -102,6 +101,16 @@ private static final Logger l = LogManager.getLogger(EntrepriseServiceImpl.class
 		return Entreprises;
 	}
 
+	@Override
+	public Entreprise getEntrepriseById(int entrepriseId) {
+		l.info("in  retrieveEntreprise id = " + entrepriseId);
+			if( entrepriseRepoistory.existsById(entrepriseId)==false)
+			{
+				return null;
+			}
+			l.info("entreprise returned : " + entrepriseRepoistory.findById(entrepriseId).get());
+			return entrepriseRepoistory.findById(entrepriseId).get();
+	}
 	///hello test 
 
 }
