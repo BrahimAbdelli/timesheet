@@ -39,7 +39,7 @@ public class EmployeTests {
 	@Test
 	public void getNombreEmployeJPQL() {
 
-		assertEquals((EmployeServiceImpl.getNombreEmployeJPQL()),1);
+		assertEquals((EmployeServiceImpl.getNombreEmployeJPQL()),9);
 
 	}	
 	
@@ -56,13 +56,5 @@ public class EmployeTests {
 		assertFalse((EmployeServiceImpl.getSalaireByEmployeIdJPQL(3))>150000);
 
 	}	
-	
-	@Test
-	public void ajouterEmploye() {
-
-		Employe employe = new Employe( "nom","prenom","email@email.com", true, Role.ADMINISTRATEUR);
 		
-		assertNotNull(EmployeServiceImpl.addOrUpdateEmploye(employe));
-
-	}		
 }
