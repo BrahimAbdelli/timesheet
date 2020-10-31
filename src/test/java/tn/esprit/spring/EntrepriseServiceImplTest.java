@@ -62,6 +62,6 @@ public class EntrepriseServiceImplTest {
 		Entreprise entrepriseRetrieved = us.getEntrepriseById(25); 
 		assertEquals(25, entrepriseRetrieved.getId());
 	}
-//test	
+//tests
 
 }
