@@ -45,6 +45,25 @@ public class Contrat implements Serializable {
 	}
 
 
+
+	public Contrat(int reference, Date dateDebut, String typeContrat, float telephone, Employe employe, float salaire) {
+		super();
+		this.reference = reference;
+		this.dateDebut = dateDebut;
+		this.typeContrat = typeContrat;
+		this.setTelephone(telephone);
+		this.employe = employe;
+		this.salaire = salaire;
+	}
+
+	public Contrat(int reference, Date dateDebut, String typeContrat, float salaire) {
+		super();
+		this.reference = reference;
+		this.dateDebut = dateDebut;
+		this.typeContrat = typeContrat;
+		this.salaire = salaire;
+	}
+
 	public Date getDateDebut() {
 		return dateDebut;
 	}
@@ -83,6 +102,14 @@ public class Contrat implements Serializable {
 
 	public void setEmploye(Employe employe) {
 		this.employe = employe;
+	}
+
+	public float getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(float telephone) {
+		this.telephone = telephone;
 	}
 	
 	

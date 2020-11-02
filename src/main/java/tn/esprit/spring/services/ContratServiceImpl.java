@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tn.esprit.spring.entities.Contrat;
 import tn.esprit.spring.repository.ContratRepository;
@@ -41,17 +42,18 @@ public class ContratServiceImpl implements IContratService {
 	}
 
 
-	@Override
-	public String deleteContrat(int id) {
-		l.info("In  deleteContrat: "); 
-		Contrat c =contratRepository.findById(id).get();
-		String msg="No such contract with this id";
-		if(c!=null){
+	@Transactional
+	public void deleteContrat(int id) {
+		try {
+			l.info(" search for contract");
+			Contrat c =contratRepository.findById(id).get();
+			l.info(" found contract");
+			l.info(" deleting  contract");
 			contratRepository.deleteById(id);
-			msg="The contract has been deleted";
+		l.info(" operation finish  contract");
+		} catch (Exception ex) {
+			l.error("contract could not be found !!!!");	
 		}
-		l.info("Out of  deleteContrat. "); 
-		return msg;
 	}
 
 

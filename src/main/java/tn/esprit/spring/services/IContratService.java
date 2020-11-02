@@ -14,7 +14,7 @@ public interface IContratService {
 
 	Contrat updateContrat(Contrat c);
 
-	String deleteContrat(int id);
+	void deleteContrat(int id);
 
 	List<Contrat> retrieveAllContrats();
 
