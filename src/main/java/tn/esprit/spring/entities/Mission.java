@@ -78,6 +78,23 @@ public class Mission implements Serializable {
 	public void setTimesheets(List<Timesheet> timesheets) {
 		this.timesheets = timesheets;
 	}
+
+	public Mission(int id, String name, String description, Departement departement, List<Timesheet> timesheets) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.departement = departement;
+		this.timesheets = timesheets;
+	}
+
+	public Mission(int id, Departement departement) {
+		super();
+		this.id = id;
+		this.departement = departement;
+	}
+
+
 	
 	
 

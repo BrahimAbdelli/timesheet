@@ -17,6 +17,8 @@ import tn.esprit.spring.repository.DepartementRepository;
 import tn.esprit.spring.repository.EmployeRepository;
 import tn.esprit.spring.repository.MissionRepository;
 import tn.esprit.spring.repository.TimesheetRepository;
+import org.apache.log4j.Logger;
+
 
 @Service
 public class TimesheetServiceImpl implements ITimesheetService {
@@ -31,16 +33,27 @@ public class TimesheetServiceImpl implements ITimesheetService {
 	@Autowired
 	EmployeRepository employeRepository;
 	
+	private static final Logger l = Logger.getLogger(EmployeServiceImpl.class);
+
+	
 	public int ajouterMission(Mission mission) {
+		
+		l.info("Je viens ajouter une mission " + mission.getName());
 		missionRepository.save(mission);
+		l.info("mission " + mission.getName() +"ajoute");
+
 		return mission.getId();
+		
 	}
     
 	public void affecterMissionADepartement(int missionId, int depId) {
+		
 		Mission mission = missionRepository.findById(missionId).get();
 		Departement dep = deptRepoistory.findById(depId).get();
+		l.info("affecter mission ");
 		mission.setDepartement(dep);
 		missionRepository.save(mission);
+		l.info("mission "+mission.getName()+" affecte a departement "+dep.getName());
 		
 	}
 
@@ -93,12 +106,17 @@ public class TimesheetServiceImpl implements ITimesheetService {
 
 	
 	public List<Mission> findAllMissionByEmployeJPQL(int employeId) {
+		l.info("Afficher mission par employe ");
+		l.debug("EmployeId="+employeId);
 		return timesheetRepository.findAllMissionByEmployeJPQL(employeId);
 	}
 
 	
 	public List<Employe> getAllEmployeByMission(int missionId) {
+		l.info("Afficher employes par mission ");
+		l.debug("MissionId="+missionId);
 		return timesheetRepository.getAllEmployeByMission(missionId);
+
 	}
 
 }

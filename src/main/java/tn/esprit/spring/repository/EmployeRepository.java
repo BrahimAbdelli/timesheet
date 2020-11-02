@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tn.esprit.spring.entities.Employe;
 import tn.esprit.spring.entities.Entreprise;
+import tn.esprit.spring.entities.Mission;
 
 @Repository
 public interface EmployeRepository extends CrudRepository<Employe, Integer>  {
@@ -56,7 +57,6 @@ public interface EmployeRepository extends CrudRepository<Employe, Integer>  {
 			+ "where deps.id=:depId")
     public Double getSalaireMoyenByDepartementId(@Param("depId")int departementId);
 	
-    		
    
 
 }
