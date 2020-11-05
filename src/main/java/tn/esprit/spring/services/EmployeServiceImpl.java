@@ -3,6 +3,7 @@ package tn.esprit.spring.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,18 +36,7 @@ public class EmployeServiceImpl implements IEmployeService {
 
 	private static final Logger l = Logger.getLogger(EmployeServiceImpl.class);
 	
-	@Override
-	public Employe authenticate(String login, String password) {
-		try {
-		
-		l.info("Je viens de lancer la méthode. " + employeRepository.getEmployeByEmailAndPassword(login, password));
-		return employeRepository.getEmployeByEmailAndPassword(login, password);
-		}
-		catch (Exception e) { l.error("Erreur dans authenticate : " + e); 
-		return null ;
-		}
 
-		}
 
 	@Override
 	public int addOrUpdateEmploye(Employe employe) {
@@ -63,42 +53,161 @@ public class EmployeServiceImpl implements IEmployeService {
 
 
 	public void mettreAjourEmailByEmployeId(String email, int employeId) {
-		Employe employe = employeRepository.findById(employeId).get();
-		employe.setEmail(email);
-		employeRepository.save(employe);
-
+		try {
+			l.info(" demarrage de la methode ");
+			l.debug("email ." + email);
+			l.debug("id" + employeId);
+			employeRepository.mettreAjourEmailByEmployeIdJPQL(email, employeId);
+	}
+		catch(Exception e) {
+			l.error("erreur lors de la mise a jour" + e);
+	}
 	}
 
 	@Transactional	
 	public void affecterEmployeADepartement(int employeId, int depId) {
-		Departement depManagedEntity = deptRepoistory.findById(depId).get();
-		Employe employeManagedEntity = employeRepository.findById(employeId).get();
+		Optional<Departement> depValue = this.deptRepoistory.findById(depId);
+		
+		if (depValue.isPresent()) {
+			Departement depManagedEntity =depValue.get();
+			
+			
+			Optional<Employe> empValue = this.employeRepository.findById(employeId);
+			
+			if (empValue.isPresent()) {
+			Employe employeManagedEntity = empValue.get();
+			
+				try {
+						l.info(" La methode consiste a effecter un employe a un departement");
+						l.debug("employe Id  "+employeId);
+						l.debug("department  Id  "+depId);
+				
+					if(depManagedEntity.getEmployes() == null){
+				
+							List<Employe> employes = new ArrayList<>();
+							employes.add(employeManagedEntity);
+							depManagedEntity.setEmployes(employes);
+							l.debug("employeManagedEntity  "+employeManagedEntity);
+					}
+					
+					else{
+			
+						depManagedEntity.getEmployes().add(employeManagedEntity);
+						l.debug("depManagedEntity  "+depManagedEntity);
+						
+					}
+				}catch(Exception e) {
+						l.error("erreur dans la methode " + e);
+					}
+			}
+	}
+	
+}
+	
+	
+	public String getEmployePrenomById(int employeId) {
+		try {
 
-		if(depManagedEntity.getEmployes() == null){
+			l.info("getEmployePrenomById");
 
-			List<Employe> employes = new ArrayList<>();
-			employes.add(employeManagedEntity);
-			depManagedEntity.setEmployes(employes);
-		}else{
+			Optional<Employe> empValue = employeRepository.findById(employeId);
+			if (empValue.isPresent()) {
+				Employe employeManagedEntity = empValue.get();
+				l.debug("getEmployePrenomById." + employeManagedEntity);
+				return employeManagedEntity.getPrenom();
+			} else {
+				return null;
+			}
 
-			depManagedEntity.getEmployes().add(employeManagedEntity);
+		} catch (Exception e) {
+			l.error("erreur dans getEmployePrenomById" + e);
+			return null;
+		}
+	}
+	 
+	public void deleteEmployeById(int employeId)
+	{
+		try {
+
+			l.info("deleteEmployeById");
+
+			l.debug("EmployeId." + employeId);
+			Optional<Employe> empValue = employeRepository.findById(employeId);
+			if (empValue.isPresent()) {
+				Employe employe = empValue.get();
+
+				l.debug("EmployeById." + employe);
+
+				for (Departement dep : employe.getDepartements()) {
+					dep.getEmployes().remove(employe);
+
+				}
+
+				employeRepository.delete(employe);
+			}
+
+		} catch (Exception e) {
+			l.error("erreur dans deleteEmployeById" + e);
+
+		}
+	}
+	
+	public int getNombreEmployeJPQL() {
+
+		l.debug("methode pour getNombreEmployeJPQL:");
+		try {
+			int i= employeRepository.countemp();
+			l.info("methode réussite ! ");
+			return i;
+		}catch (Exception e){
+			l.error("erreur méthode getNombreEmployeJPQL " +e);
+			return -1;
 		}
 
-		// à ajouter? 
-		deptRepoistory.save(depManagedEntity); 
-
 	}
+
+	public float getSalaireByEmployeIdJPQL(int employeId) {
+		l.debug("lancement de la méthode getSalaireByEmployeIdJPQL :");
+		try {
+			float a= employeRepository.getSalaireByEmployeIdJPQL(employeId);
+			l.info("getSalaireByEmployeIdJPQL a passé !");
+
+			return a;
+
+		} catch (Exception e ){
+			l.error("erreur methode getSalaireByEmployeIdJPQL" +e);
+			return -1;
+		}
+	}	
+	
 	@Transactional
 	public void desaffecterEmployeDuDepartement(int employeId, int depId)
 	{
-		Departement dep = deptRepoistory.findById(depId).get();
-
-		int employeNb = dep.getEmployes().size();
-		for(int index = 0; index < employeNb; index++){
-			if(dep.getEmployes().get(index).getId() == employeId){
-				dep.getEmployes().remove(index);
-				break;//a revoir
+			Optional<Departement> depValue =deptRepoistory.findById(depId);
+			if (depValue.isPresent()) {
+				Departement dep = depValue.get();
+			
+			
+			try{
+				l.info("desaffecterEmployeDuDepartement");
+				l.debug("id de l employe"+employeId);
+				l.debug("id du departement  "+depId);
+			
+			
+	
+			int employeNb = dep.getEmployes().size();
+			for(int i = 0; i < employeNb; i++){
+				if(dep.getEmployes().get(i).getId() == employeId){
+					dep.getEmployes().remove(i);		
+					break;//a revoir
+				}
+			}		
+			
 			}
+			 catch(Exception e) {
+				l.error("erreur lors de l execution de la methode" + e);
+			}
+			l.info(" sortir de la methode");
 		}
 	} 
 	
@@ -109,51 +218,31 @@ public class EmployeServiceImpl implements IEmployeService {
 		return contrat.getReference();
 	}
 
-	public void affecterContratAEmploye(int contratId, int employeId) {
-		Contrat contratManagedEntity = contratRepoistory.findById(contratId).get();
-		Employe employeManagedEntity = employeRepository.findById(employeId).get();
-
-		contratManagedEntity.setEmploye(employeManagedEntity);
-		contratRepoistory.save(contratManagedEntity);
-
-	}
-
-	public String getEmployePrenomById(int employeId) {
-		Employe employeManagedEntity = employeRepository.findById(employeId).get();
-		return employeManagedEntity.getPrenom();
-	}
-	 
-	public void deleteEmployeById(int employeId)
-	{
-		Employe employe = employeRepository.findById(employeId).get();
-
-		//Desaffecter l'employe de tous les departements
-		//c'est le bout master qui permet de mettre a jour
-		//la table d'association
-		for(Departement dep : employe.getDepartements()){
-			dep.getEmployes().remove(employe);
-		}
-
-		employeRepository.delete(employe);
-	}
-
-	public void deleteContratById(int contratId) {
-		Contrat contratManagedEntity = contratRepoistory.findById(contratId).get();
-		contratRepoistory.delete(contratManagedEntity);
-
-	}
-
-	public int getNombreEmployeJPQL() {
-//		return employeRepository.countemp();
-		l.debug("request to get Nombre Employe:");
+	public int affecterContratAEmploye(int contratId, int employeId) {
+		l.info("lancement de la methode");
 		try {
-			int i= employeRepository.countemp();
-			l.info("getNombreEmployeJPQL done!!!! ");
-			return i;
+			l.info("affecterContratAEmploye");
+			Optional<Contrat> contratManagedEntity =contratRepoistory.findById(contratId);
+			Optional<Employe> value = employeRepository.findById(employeId);
+				if (contratManagedEntity.isPresent()){
+					Contrat contrat=contratManagedEntity.get();
+					if (value.isPresent()){
+						Employe employe=value.get();
+						contrat.setEmploye(employe);
+			
+					}
+					contratRepoistory.save(contrat);
+			
+				}
+			l.info("affecterContratAEmploye effetué !!");
+			return 1;
+
+
 		}catch (Exception e){
-			l.error("error methode getNombreEmployeJPQL " +e);
+			l.error("erreur dans la methode affecterContratAEmploye" +e);
 			return -1;
 		}
+
 
 	}
 
@@ -172,20 +261,6 @@ public class EmployeServiceImpl implements IEmployeService {
 	}
 	public void deleteAllContratJPQL() {
 		employeRepository.deleteAllContratJPQL();
-	}
-
-	public float getSalaireByEmployeIdJPQL(int employeId) {
-		l.debug("request to get salaire Employe by id:");
-		try {
-			float a= employeRepository.getSalaireByEmployeIdJPQL(employeId);
-			l.info("getSalaireByEmployeIdJPQL a passé !");
-
-			return a;
-
-		} catch (Exception e ){
-			l.error("erreur methode getSalaireByEmployeIdJPQL" +e);
-			return -1;
-		}
 	}
 
 	public Double getSalaireMoyenByDepartementId(int departementId) {
