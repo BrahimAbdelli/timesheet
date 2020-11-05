@@ -24,7 +24,7 @@ import tn.esprit.spring.services.TimesheetServiceImpl;
 @SpringBootTest
 public class TimesheetTests {
 	@Autowired
-	TimesheetServiceImpl TimesheetServiceImpl;
+	TimesheetServiceImpl timesheetServiceImpl;
 	@Autowired
 	TimesheetRepository TR;
 	@Autowired
@@ -38,14 +38,14 @@ public class TimesheetTests {
 		Departement d= DR.findById(1).get();
 		List<Timesheet> t=(List<Timesheet>) TR.findAll();
 		Mission m=new Mission(2,"bla","bla",d,t);
-		int timesheet= TimesheetServiceImpl.ajouterMission(m);
+		int timesheet= timesheetServiceImpl.ajouterMission(m);
 		assertEquals(2, timesheet);
 
 		 	
 	}
 	@Test
 	public void testaffecterMissionADepartement(){
-		TimesheetServiceImpl.affecterMissionADepartement(1,2);
+		timesheetServiceImpl.affecterMissionADepartement(1,2);
 		Departement d= DR.findById(2).get();
 		Mission m=new Mission(1,d);
 		assertEquals(2,m.getDepartement().getId());
@@ -53,7 +53,7 @@ public class TimesheetTests {
 	}
 	@Test
 	public void testfindAllMissionByEmployeJPQL(){
-		List<Mission> m = TimesheetServiceImpl.findAllMissionByEmployeJPQL(2);
+		List<Mission> m = timesheetServiceImpl.findAllMissionByEmployeJPQL(2);
 
 			assertTrue(m.size()<3);
 
@@ -61,7 +61,7 @@ public class TimesheetTests {
 
 	@Test
 	public void testgetAllEmployeByMission(){
-		List<Employe> e =TimesheetServiceImpl.getAllEmployeByMission(3);
+		List<Employe> e =timesheetServiceImpl.getAllEmployeByMission(3);
 		assertTrue(e.size()<=3);
 	}
 }
