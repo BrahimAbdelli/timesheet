@@ -49,7 +49,7 @@ public class ControllerEmployeImpl  {
 	private String url="/login.xhtml?faces-redirect=true";
 	
 	public String doLogin() {
-
+		
 		String navigateTo = "null";
 		authenticatedUser=employeService.authenticate(login, password);
 		if (authenticatedUser != null && authenticatedUser.getRole() == Role.ADMINISTRATEUR) {

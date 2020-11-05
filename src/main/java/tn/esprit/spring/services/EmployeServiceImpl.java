@@ -276,4 +276,14 @@ public class EmployeServiceImpl implements IEmployeService {
 		return (List<Employe>) employeRepository.findAll();
 	}
 
+	@Override
+	public Employe authenticate(String login, String password) {
+		return employeRepository.getEmployeByEmailAndPassword(login, password);
+	}	
+	
+	public void deleteContratById(int contratId) {
+		Contrat contratManagedEntity = contratRepoistory.findById(contratId).get();
+		contratRepoistory.delete(contratManagedEntity);
+
+	}
 }
