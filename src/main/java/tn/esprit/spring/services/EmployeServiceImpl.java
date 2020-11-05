@@ -38,13 +38,8 @@ public class EmployeServiceImpl implements IEmployeService {
 	@Override
 	public Employe authenticate(String login, String password) {
 		try {
-			
 		
-		l.info("hani jit");
-		
-		l.debug("bech nebda fel méthode");
-		
-		l.debug("Je viens de lancer la divsion. " + employeRepository.getEmployeByEmailAndPassword(login, password));
+		l.info("Je viens de lancer la méthode. " + employeRepository.getEmployeByEmailAndPassword(login, password));
 		return employeRepository.getEmployeByEmailAndPassword(login, password);
 		}
 		catch (Exception e) { l.error("Erreur dans authenticate : " + e); 
@@ -55,13 +50,15 @@ public class EmployeServiceImpl implements IEmployeService {
 
 	@Override
 	public int addOrUpdateEmploye(Employe employe) {
-		l.info("hani jit");
-		
-		l.debug("bech nebda fel méthode");
-		
-		l.debug("Je viens de lancer la divsion. " + employe);
-		employeRepository.save(employe);
-		return employe.getId();
+		try {
+			employeRepository.save(employe);
+			l.debug("employee has been add with succes !"+employe.getId());
+			return employe.getId();
+
+		} catch (Exception e) {
+			l.error("error methode add employe" + e);
+			return -1;
+		}		
 	}
 
 
@@ -147,7 +144,17 @@ public class EmployeServiceImpl implements IEmployeService {
 	}
 
 	public int getNombreEmployeJPQL() {
-		return employeRepository.countemp();
+//		return employeRepository.countemp();
+		l.debug("request to get Nombre Employe:");
+		try {
+			int i= employeRepository.countemp();
+			l.info("getNombreEmployeJPQL done!!!! ");
+			return i;
+		}catch (Exception e){
+			l.error("error methode getNombreEmployeJPQL " +e);
+			return -1;
+		}
+
 	}
 
 	public List<String> getAllEmployeNamesJPQL() {
@@ -168,7 +175,17 @@ public class EmployeServiceImpl implements IEmployeService {
 	}
 
 	public float getSalaireByEmployeIdJPQL(int employeId) {
-		return employeRepository.getSalaireByEmployeIdJPQL(employeId);
+		l.debug("request to get salaire Employe by id:");
+		try {
+			float a= employeRepository.getSalaireByEmployeIdJPQL(employeId);
+			l.info("getSalaireByEmployeIdJPQL a passé !");
+
+			return a;
+
+		} catch (Exception e ){
+			l.error("erreur methode getSalaireByEmployeIdJPQL" +e);
+			return -1;
+		}
 	}
 
 	public Double getSalaireMoyenByDepartementId(int departementId) {
