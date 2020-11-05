@@ -12,7 +12,7 @@ import tn.esprit.spring.entities.Timesheet;
 
 public interface IEmployeService {	 
 	
-	public Employe authenticate(String login, String password);
+	public void authenticate(String login, String password);
 	public void deleteContratById(int contratId);
 	
 	public void mettreAjourEmailByEmployeId(String email, int employeId);

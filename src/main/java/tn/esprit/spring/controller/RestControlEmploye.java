@@ -30,19 +30,7 @@ public class RestControlEmploye {
 	@Autowired
 	IEntrepriseService ientrepriseservice;
 	@Autowired
-	ITimesheetService itimesheetservice;
-
-	// http://localhost:8081/SpringMVC/servlet/authenticate
-	//{"id":1,"nom":"kallel", "prenom":"khaled", "email":"Khaled.kallel@ssiiconsulting.tn", "isActif":true, "role":"INGENIEUR"}
-	
-	@PostMapping("/authenticate")
-	@ResponseBody
-	public Employe authenticate(@RequestBody String login, String password)
-	{
-		iemployeservice.authenticate(login, password);
-		return iemployeservice.authenticate(login, password);
-	}
-	
+	ITimesheetService itimesheetservice;	
 	
 	// http://localhost:8081/SpringMVC/servlet/ajouterEmployer
 	//{"id":1,"nom":"kallel", "prenom":"khaled", "email":"Khaled.kallel@ssiiconsulting.tn", "isActif":true, "role":"INGENIEUR"}

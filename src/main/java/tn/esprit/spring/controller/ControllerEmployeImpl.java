@@ -51,7 +51,7 @@ public class ControllerEmployeImpl  {
 	public String doLogin() {
 		
 		String navigateTo = "null";
-		authenticatedUser=employeService.authenticate(login, password);
+//		authenticatedUser=employeService.authenticate(login, password);
 		if (authenticatedUser != null && authenticatedUser.getRole() == Role.ADMINISTRATEUR) {
 			navigateTo = "/pages/admin/welcome.xhtml?faces-redirect=true";
 			loggedIn = true;

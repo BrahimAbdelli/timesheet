@@ -275,15 +275,28 @@ public class EmployeServiceImpl implements IEmployeService {
 	public List<Employe> getAllEmployes() {
 		return (List<Employe>) employeRepository.findAll();
 	}
-
-	@Override
-	public Employe authenticate(String login, String password) {
-		return employeRepository.getEmployeByEmailAndPassword(login, password);
-	}	
 	
 	public void deleteContratById(int contratId) {
-		Contrat contratManagedEntity = contratRepoistory.findById(contratId).get();
-		contratRepoistory.delete(contratManagedEntity);
+		try {
 
+			l.info("deleteContratById");
+
+			l.debug("contratId." + contratId);
+			Optional<Contrat> value = contratRepoistory.findById(contratId);
+			
+			if(value.isPresent()){
+			Contrat contratManagedEntity = value.get();
+			
+			l.debug("deleteContratById." + contratManagedEntity);
+			contratRepoistory.delete(contratManagedEntity);}
+		} catch (Exception e) {
+			l.error("Erreur dans deleteContratById" + e);
+
+		}
+
+	}
+	@Override
+	public void authenticate(String login, String password) {
+//		return employeRepository.getEmployeByEmailAndPassword(login, password);
 	}
 }
