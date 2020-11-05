@@ -117,10 +117,10 @@
 			</plugin>
 		</plugins>
 	</build>
-<distributionManagement>
+	<repositories>
 		<repository>
 			<id>maven-group</id>
 			<url>http://localhost:8081/repository/maven-releases/</url>
 		</repository>
-</distributionManagement>
+	</repositories>
 </project>
